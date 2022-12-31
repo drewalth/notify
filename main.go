@@ -106,10 +106,10 @@ func (client *Client) GetTokenArn(deviceToken string) (string, error) {
 	return "", errors.New("no valid match")
 }
 
-// Unregister SNS Endpoint
-func (client *Client) Unregister(arn string) error {
+// Unregister SNS Endpoint / user device
+func (client *Client) Unregister(endpointArn string) error {
 	params := &sns.DeleteEndpointInput{
-		EndpointArn: aws.String(arn),
+		EndpointArn: aws.String(endpointArn),
 	}
 	_, err := client.sns.DeleteEndpoint(params)
 	return err
