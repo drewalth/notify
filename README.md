@@ -2,8 +2,11 @@
 
 Wrapper for the AWS SNS Go SDK.
 
-> Work-in-progress. Currently can only send to iOS.
+- [x] Send push notification
+- [x] Register user device with SNS
+- [x] Remove user device/endpoint from SNS
 
+---
 
 ```shell
 # copy demo env file 
@@ -20,30 +23,30 @@ go run examples/examples.go
 ```go
 // examples/examples.go
 
-	client := notify.NewClient(appARN, &session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	})
+client := notify.NewClient(appARN, &session.Options{
+	SharedConfigState: session.SharedConfigEnable,
+})
 
-	alert := notify.Alert{
-		Body:  aws.String("Alert body"),
-		Title: aws.String("Alert title"),
-	}
+alert := notify.Alert{
+	Body:  aws.String("Alert body"),
+	Title: aws.String("Alert title"),
+}
 
-	notificationSound := "default"
-	notificationBadge := 0
+notificationSound := "default"
+notificationBadge := 0
 
-	pushData := notify.Push{
-		Alert: &alert,
-		Sound: &notificationSound,
-		Badge: &notificationBadge,
-	}
+pushData := notify.Push{
+	Alert: &alert,
+	Sound: &notificationSound,
+	Badge: &notificationBadge,
+}
 
-	endpointArn, err := client.GetTokenArn(deviceToken)
+endpointArn, err := client.GetTokenArn(deviceToken)
 
-	check(err)
+check(err)
 
-	result, err := client.Send(endpointArn, &pushData)
+result, err := client.Send(endpointArn, &pushData)
 
-	check(err)
-	fmt.Println(*result.MessageId)
+check(err)
+fmt.Println(*result.MessageId)
 ```
