@@ -97,8 +97,14 @@ func (client *Client) GetTokenArn(deviceToken string) (string, error) {
 	// this will take forever if there are a lot of
 	// app installs/subscribers
 	for _, t := range result.Endpoints {
+		// token attribute
 		var tAtt = t.Attributes["Token"]
-		if *tAtt == deviceToken {
+		// enabled attribute
+		var eAtt = t.Attributes["Enabled"]
+
+		// return the endpoint ARN if the device token
+		// matches and the endpoint is enabled
+		if *tAtt == deviceToken && *eAtt == "true" {
 			return *t.EndpointArn, nil
 		}
 	}
