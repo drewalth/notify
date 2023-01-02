@@ -1,7 +1,5 @@
 // Package notify provides helpers for setting up, maintaining, and
 // sending Push notifications with the AWS SNS SDK
-//
-// wip
 package notify
 
 import (
@@ -43,7 +41,8 @@ type wrapper struct {
 	Default     string `json:"default"`
 }
 
-// Create a new SNS client
+// NewClient instantiates a new SNS client with the provided
+// AWS session options.
 func NewClient(applicationArn string, sessionOptions *session.Options) *Client {
 	client := new(Client)
 	client.appArn = &applicationArn
@@ -53,7 +52,7 @@ func NewClient(applicationArn string, sessionOptions *session.Options) *Client {
 	return client
 }
 
-// Sends a message to a specific Endpoint ARN
+// Send a push notification to a specific Endpoint ARN.
 func (client *Client) Send(arn string, data *Push) (*sns.PublishOutput, error) {
 	msg := wrapper{}
 	ios := iosPush{
@@ -81,7 +80,7 @@ func (client *Client) Send(arn string, data *Push) (*sns.PublishOutput, error) {
 	return result, err
 }
 
-// Get the Endpoint ARN for the provided device token
+// GetTokenArn retrieves the Endpoint ARN for the provided device token
 func (client *Client) GetTokenArn(deviceToken string) (string, error) {
 
 	var input = sns.ListEndpointsByPlatformApplicationInput{
